@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<script src="auth.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoja de contrastes AIF-C01</title>
+<style>
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f172a;color:#e2e8f0;line-height:1.55}
+  main{padding-top:52px !important;max-width:960px;margin:0 auto;padding:28px 18px 60px}
+  h1{font-size:26px;color:#ff9900;margin:0 0 4px}
+  .sub{color:#94a3b8;margin:0 0 22px;font-size:14px}
+  h2{font-size:18px;margin:30px 0 8px;border-bottom:1px solid #1e2a44;padding-bottom:6px}
+  table{width:100%;border-collapse:collapse;margin:8px 0;font-size:14.5px}
+  th,td{border:1px solid #1e2a44;padding:9px 10px;text-align:left;vertical-align:top}
+  th{background:#111c33;color:#ff9900}
+  tr:nth-child(even) td{background:#0d1629}
+  .tip{border-left:3px solid #ff9900;background:#111c33;padding:9px 12px;margin:10px 0;border-radius:0 8px 8px 0;font-size:14.5px}
+  .tip b{color:#ff9900}
+  .ico{display:inline-block;width:1em;height:1em;vertical-align:-0.125em;margin-right:6px;color:#ff9900}
+  nav{font-size:14px;margin-bottom:18px}nav a{color:#ff9900;margin-right:14px}
+</style>
+</head>
+<body>
+<a href="index.html" style="position:fixed;top:10px;left:12px;z-index:50;background:#1e2a44;color:#e2e8f0;text-decoration:none;font:700 13px -apple-system,BlinkMacSystemFont,sans-serif;padding:7px 11px;border-radius:8px">Inicio</a>
+
+<main>
+
+<h1>Hoja de contrastes AIF-C01</h1>
+<p class="sub">Las parejas de servicios que más se confunden en el examen. Lee la pista de la izquierda y busca a qué servicio apunta.</p>
+
+<h2>1. Servicios especializados: ¿qué entra y qué sale?</h2>
+<table>
+<thead><tr><th>Servicio</th><th>Entra</th><th>Sale</th><th>Pista en la pregunta</th></tr></thead>
+<tbody>
+<tr><td><b>Textract</b></td><td>Documento o imagen de un documento</td><td>Texto, tablas, campos de formulario</td><td>Facturas, contratos escaneados, credenciales, formularios, PDFs</td></tr>
+<tr><td><b>Transcribe</b></td><td>Audio o voz</td><td>Texto</td><td>Llamadas grabadas, podcasts, subtítulos, dictado</td></tr>
+<tr><td><b>Polly</b></td><td>Texto</td><td>Voz</td><td>Leer en voz alta, IVR que habla, audiolibros</td></tr>
+<tr><td><b>Comprehend</b></td><td>Texto</td><td>Sentimiento, entidades, PII, temas</td><td>Reseñas molestas o felices, extraer nombres o empresas de un texto</td></tr>
+<tr><td><b>Translate</b></td><td>Texto en un idioma</td><td>Texto en otro idioma</td><td>Catálogo o sitio en varios idiomas</td></tr>
+<tr><td><b>Rekognition</b></td><td>Foto o video</td><td>Objetos, rostros, contenido inapropiado</td><td>Moderar imágenes, detectar personas u objetos en video</td></tr>
+<tr><td><b>Personalize</b></td><td>Historial de comportamiento de usuarios</td><td>Recomendaciones</td><td>"Recomendado para ti", "los que compraron esto también compraron"</td></tr>
+</tbody>
+</table>
+<div class="tip"><b>Truco Textract vs Transcribe:</b> <b>Tex</b>tract = <b>tex</b>to que ya está escrito en papel. <b>Trans</b>cribe = <b>trans</b>forma voz en texto. Si hay audio de por medio, es Transcribe. Siempre.</div>
+<div class="tip"><b>Combinación clásica:</b> llamadas grabadas y saber si el cliente quedó molesto = Transcribe (voz a texto) + Comprehend (sentimiento del texto).</div>
+
+<h2>2. Humanos en el ciclo: Ground Truth vs A2I</h2>
+<table>
+<thead><tr><th>Servicio</th><th>Cuándo</th><th>Para qué</th><th>Pista</th></tr></thead>
+<tbody>
+<tr><td><b>SageMaker Ground Truth</b></td><td><b>Antes</b> de entrenar</td><td>Personas etiquetan los datos de entrenamiento</td><td>"Datos sin etiquetar", "marcar cada foto", "crear el dataset"</td></tr>
+<tr><td><b>Amazon A2I</b></td><td><b>Después</b>, en producción</td><td>Una persona revisa predicciones dudosas</td><td>"Baja confianza", "revisión humana antes de decidir"</td></tr>
+</tbody>
+</table>
+<div class="tip"><b>Truco:</b> Ground Truth = la "verdad de base" con la que el modelo aprende. A2I = la "segunda opinión" humana cuando el modelo ya trabaja.</div>
+
+<h2>3. Gobernanza: ¿quién guarda qué?</h2>
+<table>
+<thead><tr><th>Servicio</th><th>Responde a</th><th>Pista</th></tr></thead>
+<tbody>
+<tr><td><b>CloudTrail</b></td><td>¿Quién hizo qué, cuándo y desde dónde?</td><td>Llamadas a la API, quién borró, quién invocó, IP, auditoría de acciones</td></tr>
+<tr><td><b>Config</b></td><td>¿Cómo está configurado un recurso y cómo ha cambiado?</td><td>Historial de configuración, reglas de cumplimiento ("todo bucket cifrado"), recurso no conforme</td></tr>
+<tr><td><b>Audit Manager</b></td><td>¿Qué evidencia tengo para el auditor?</td><td>Auditoría externa, SOC 2, marcos de control, recolectar evidencia</td></tr>
+<tr><td><b>Trusted Advisor</b></td><td>¿Qué me recomienda AWS mejorar?</td><td>Recomendaciones de costo, seguridad, rendimiento y límites. No guarda historial ni evidencia</td></tr>
+<tr><td><b>CloudWatch</b></td><td>¿Cómo se está comportando ahora?</td><td>Métricas, latencia, errores, logs, alarmas</td></tr>
+</tbody>
+</table>
+<div class="tip"><b>Truco:</b> Trail = rastro de acciones. Config = foto de la configuración. Audit Manager = carpeta para el auditor. Trusted Advisor = consejero; solo aconseja. CloudWatch = el monitor del tablero.</div>
+
+<h2>4. Modelos en SageMaker: Clarify vs Model Monitor vs Model Cards</h2>
+<table>
+<thead><tr><th>Servicio</th><th>Cuándo</th><th>Para qué</th></tr></thead>
+<tbody>
+<tr><td><b>Clarify</b></td><td>Antes y durante</td><td>Detectar sesgo entre grupos y explicar qué variables pesan (explicabilidad)</td></tr>
+<tr><td><b>Model Monitor</b></td><td>En producción</td><td>Detectar drift: los datos o la calidad cambiaron respecto al baseline de entrenamiento</td></tr>
+<tr><td><b>Model Cards</b></td><td>Documentación</td><td>Registrar el uso previsto, los riesgos y los detalles de entrenamiento del modelo</td></tr>
+</tbody>
+</table>
+<div class="tip"><b>Truco:</b> "¿Es justo?" = Clarify. "¿Se echó a perder con el tiempo?" = Model Monitor. "¿Dónde está documentado?" = Model Cards.</div>
+
+<h2>5. Recomendar vs responder</h2>
+<table>
+<thead><tr><th>Necesidad</th><th>Servicio</th></tr></thead>
+<tbody>
+<tr><td>Recomendar productos, películas o contenido según el comportamiento</td><td><b>Personalize</b></td></tr>
+<tr><td>Responder preguntas en lenguaje natural sobre documentos propios</td><td><b>Bedrock Knowledge Bases</b> (o Amazon Q Business como producto listo)</td></tr>
+</tbody>
+</table>
+
+<h2>6. Técnicas de prompt</h2>
+<table>
+<thead><tr><th>Técnica</th><th>Qué hace</th><th>Pista</th></tr></thead>
+<tbody>
+<tr><td><b>Zero-shot</b></td><td>Pide la tarea sin ejemplos</td><td>"Solo la instrucción"</td></tr>
+<tr><td><b>Few-shot</b></td><td>Da algunos ejemplos de entrada y salida</td><td>"Incluyen 3 ejemplos", "para que siga el formato"</td></tr>
+<tr><td><b>Chain-of-thought</b></td><td>Pide razonar por pasos</td><td>"Paso a paso", problemas de varios pasos o de cálculo</td></tr>
+<tr><td><b>Negative prompting</b></td><td>Dice lo que NO debe hacer</td><td>"No incluyas", "evita mencionar"</td></tr>
+</tbody>
+</table>
+
+<h2>7. Métricas</h2>
+<table>
+<thead><tr><th>Métrica</th><th>Úsala cuando</th></tr></thead>
+<tbody>
+<tr><td><b>Accuracy</b></td><td>Las clases están balanceadas. Con clases desbalanceadas engaña.</td></tr>
+<tr><td><b>Recall</b></td><td>Lo peor es que se te escape un positivo: fraude, enfermedad.</td></tr>
+<tr><td><b>Precision</b></td><td>Lo peor es una falsa alarma: marcar como spam un correo bueno.</td></tr>
+<tr><td><b>F1-score</b></td><td>Necesitas balancear precision y recall, sobre todo con datos desbalanceados.</td></tr>
+<tr><td><b>RMSE</b></td><td>Regresión (predecir números).</td></tr>
+<tr><td><b>ROUGE</b></td><td>Resúmenes generados vs resúmenes de referencia.</td></tr>
+<tr><td><b>BLEU</b></td><td>Traducciones generadas vs traducciones de referencia.</td></tr>
+</tbody>
+</table>
+<div class="tip"><b>Truco:</b> Recall = "no se me escapa nadie". Precision = "cuando digo que sí, de verdad es sí".</div>
+
+<h2>8. Formas de inferencia en Bedrock</h2>
+<table>
+<thead><tr><th>Opción</th><th>Cuándo</th></tr></thead>
+<tbody>
+<tr><td><b>On-demand</b></td><td>Tráfico variable, pagas por token. La opción por defecto.</td></tr>
+<tr><td><b>Batch inference</b></td><td>Muchos documentos sin prisa (por ejemplo, cada noche). Más barato.</td></tr>
+<tr><td><b>Provisioned Throughput</b></td><td>Capacidad garantizada para tráfico alto y constante, o para usar un modelo personalizado (fine-tuned).</td></tr>
+</tbody>
+</table>
+</main>
+</body>
+</html>
