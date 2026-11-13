@@ -47,20 +47,6 @@
   .hidden { display:none !important; }
   details { margin-top:12px; } summary { cursor:pointer; color:var(--accent); font-weight:700; font-size:14px; }
 
-  .ver-chip { font-size:12px; font-weight:700; line-height:1; font-family:inherit; display:inline-block; vertical-align:middle; background:#1a2540; color:var(--accent); border:1px solid var(--accent); border-radius:10px; padding:4px 9px; margin-left:8px; }
-  button.ver-chip { cursor:pointer; } button.ver-chip:hover { background:var(--accent); color:#111; }
-  .cl-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:1000; padding:16px; }
-  .cl-backdrop.open { display:flex; }
-  .cl-modal { background:var(--card); border:1px solid var(--line); border-radius:12px; max-width:760px; width:100%; max-height:85vh; overflow:auto; }
-  .cl-head { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--card); }
-  .cl-head h3 { font-size:15px; margin:0; }
-  .cl-close { background:transparent; border:1px solid var(--line); color:var(--muted); border-radius:6px; padding:5px 10px; cursor:pointer; font-family:inherit; }
-  .cl-body { padding:14px 18px; font-size:13.5px; line-height:1.55; }
-  .cl-ver { margin:0 0 16px; } .cl-ver h4 { font-size:14px; margin:0 0 4px; color:var(--accent); } .cl-ver h4 small { color:var(--muted); font-weight:500; margin-left:8px; }
-  .cl-ver ul { margin:4px 0 0 18px; padding:0; } .cl-ver li { margin:4px 0; }
-  .cl-body code { background:#0d1629; padding:1px 5px; border-radius:4px; font-size:12.5px; }
-  .cl-tag { display:inline-block; font-size:10.5px; font-weight:800; padding:1px 6px; border-radius:5px; margin-right:6px; vertical-align:1px; }
-  .cl-add { background:#14532d; color:#bbf7d0; } .cl-chg { background:#1a2540; color:var(--accent); border:1px solid var(--accent); } .cl-fix { background:#5a3a07; color:#fde68a; }
   .next { background:linear-gradient(135deg,#2a1d06,#111c33); border:2px solid var(--accent); border-radius:14px; padding:18px 20px; margin:0 0 18px; }
   .next .k { font-size:12px; color:var(--accent); font-weight:800; letter-spacing:.5px; text-transform:uppercase; }
   .next h2 { margin:4px 0 6px; font-size:21px; border:0; padding:0; }
@@ -69,6 +55,10 @@
   .next .row { margin-top:12px; }
   .mod.is-next { border:2px solid var(--accent); box-shadow:0 0 0 3px rgba(255,153,0,.15); }
   .mod .nx { align-self:flex-start; background:var(--accent); color:#111; font-size:11.5px; font-weight:800; padding:2px 8px; border-radius:99px; }
+  .vh-wrap { text-align:center; padding:18px 0 8px; }
+  .vh-btn { background:none; border:0; padding:0; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; color:var(--muted); text-decoration:underline dotted; text-underline-offset:3px; cursor:pointer; }
+  .vh-btn:hover, .vh-btn:focus-visible { color:var(--ink); }
+  .vh-txt { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; color:var(--muted); }
 </style>
 </head>
 <body>
@@ -88,7 +78,7 @@
   <!-- APP -->
   <section id="app" class="hidden">
     <div class="row">
-      <div><h1>Hola, <span>Gaby</span> <span class="ver-chip" title="Versión del curso">v2.1</span></h1><p class="sub" style="margin:0">Tu curso para AWS Certified AI Practitioner (AIF-C01)</p></div>
+      <div><h1>Hola, <span>Gaby</span></h1><p class="sub" style="margin:0">Tu curso para AWS Certified AI Practitioner (AIF-C01)</p></div>
       <span class="sp"></span>
       <button class="btn sec" type="button" id="logout">Cerrar sesión</button>
     </div>
@@ -154,7 +144,8 @@
       </form>
     </details>
   </section>
-<p class="sub" style="margin-top:28px;font-size:12.5px">Versión 2.1 · Tus avances y resultados se guardan automáticamente en un servidor para que Jair pueda revisarlos y ajustar tu plan. Tu respaldo local sigue funcionando igual.</p>
+<p class="sub" style="margin-top:28px;font-size:12.5px">Tus avances y resultados se guardan automáticamente en un servidor para que Jair pueda revisarlos y ajustar tu plan. Tu respaldo local sigue funcionando igual.</p>
+<div class="vh-wrap"><span class="vh-txt" title="Versión del curso">v2.2.0 — build 2026-11-13</span></div>
 </main>
 
 <script src="sync.js"></script>
