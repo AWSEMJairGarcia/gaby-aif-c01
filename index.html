@@ -46,6 +46,29 @@
   .hint { color:var(--muted); font-size:12.5px; }
   .hidden { display:none !important; }
   details { margin-top:12px; } summary { cursor:pointer; color:var(--accent); font-weight:700; font-size:14px; }
+
+  .ver-chip { font-size:12px; font-weight:700; line-height:1; font-family:inherit; display:inline-block; vertical-align:middle; background:#1a2540; color:var(--accent); border:1px solid var(--accent); border-radius:10px; padding:4px 9px; margin-left:8px; }
+  button.ver-chip { cursor:pointer; } button.ver-chip:hover { background:var(--accent); color:#111; }
+  .cl-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:1000; padding:16px; }
+  .cl-backdrop.open { display:flex; }
+  .cl-modal { background:var(--card); border:1px solid var(--line); border-radius:12px; max-width:760px; width:100%; max-height:85vh; overflow:auto; }
+  .cl-head { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--card); }
+  .cl-head h3 { font-size:15px; margin:0; }
+  .cl-close { background:transparent; border:1px solid var(--line); color:var(--muted); border-radius:6px; padding:5px 10px; cursor:pointer; font-family:inherit; }
+  .cl-body { padding:14px 18px; font-size:13.5px; line-height:1.55; }
+  .cl-ver { margin:0 0 16px; } .cl-ver h4 { font-size:14px; margin:0 0 4px; color:var(--accent); } .cl-ver h4 small { color:var(--muted); font-weight:500; margin-left:8px; }
+  .cl-ver ul { margin:4px 0 0 18px; padding:0; } .cl-ver li { margin:4px 0; }
+  .cl-body code { background:#0d1629; padding:1px 5px; border-radius:4px; font-size:12.5px; }
+  .cl-tag { display:inline-block; font-size:10.5px; font-weight:800; padding:1px 6px; border-radius:5px; margin-right:6px; vertical-align:1px; }
+  .cl-add { background:#14532d; color:#bbf7d0; } .cl-chg { background:#1a2540; color:var(--accent); border:1px solid var(--accent); } .cl-fix { background:#5a3a07; color:#fde68a; }
+  .next { background:linear-gradient(135deg,#2a1d06,#111c33); border:2px solid var(--accent); border-radius:14px; padding:18px 20px; margin:0 0 18px; }
+  .next .k { font-size:12px; color:var(--accent); font-weight:800; letter-spacing:.5px; text-transform:uppercase; }
+  .next h2 { margin:4px 0 6px; font-size:21px; border:0; padding:0; }
+  .next p { margin:0 0 6px; color:var(--ink); font-size:14.5px; }
+  .next .meta { color:var(--muted); font-size:13px; }
+  .next .row { margin-top:12px; }
+  .mod.is-next { border:2px solid var(--accent); box-shadow:0 0 0 3px rgba(255,153,0,.15); }
+  .mod .nx { align-self:flex-start; background:var(--accent); color:#111; font-size:11.5px; font-weight:800; padding:2px 8px; border-radius:99px; }
 </style>
 </head>
 <body>
@@ -65,10 +88,12 @@
   <!-- APP -->
   <section id="app" class="hidden">
     <div class="row">
-      <div><h1>Hola, <span>Gaby</span></h1><p class="sub" style="margin:0">Tu curso para AWS Certified AI Practitioner (AIF-C01)</p></div>
+      <div><h1>Hola, <span>Gaby</span> <span class="ver-chip" title="Versión del curso">v2.1</span></h1><p class="sub" style="margin:0">Tu curso para AWS Certified AI Practitioner (AIF-C01)</p></div>
       <span class="sp"></span>
       <button class="btn sec" type="button" id="logout">Cerrar sesión</button>
     </div>
+
+    <div class="next" id="next" role="region" aria-label="Tu siguiente paso" style="margin-top:18px"></div>
 
     <h2>Cómo llevar el curso</h2>
     <ol class="steps">
@@ -129,7 +154,7 @@
       </form>
     </details>
   </section>
-<p class="sub" style="margin-top:28px;font-size:12.5px">Versión 2.0 · 11 nov 2026 · Tus avances y resultados se guardan automáticamente en un servidor para que Jair pueda revisarlos y ajustar tu plan. Tu respaldo local sigue funcionando igual.</p>
+<p class="sub" style="margin-top:28px;font-size:12.5px">Versión 2.1 · Tus avances y resultados se guardan automáticamente en un servidor para que Jair pueda revisarlos y ajustar tu plan. Tu respaldo local sigue funcionando igual.</p>
 </main>
 
 <script src="sync.js"></script>
@@ -165,10 +190,37 @@ function status(m){
   if(!st.done) return {cls:"prog", txt:"En curso · "+res.length+" ejercicios resueltos", btn:"Continuar"};
   return {cls:"done", txt:"Terminado · "+ok+" de "+res.length+" correctos · "+fmt(st.base), btn:"Ver resultados"};
 }
+
+// ---------- Tu siguiente paso (Gaby) ----------
+const ORDEN=["gaby-diagnostico","gaby-guia1","gaby-practica","gaby-guia2","gaby-simulacro1"];
+const PORQUE={
+  "gaby-diagnostico":"Son 20 preguntas para ver de dónde partes. Con tu resultado se ajusta tu ruta y sabrás en qué temas enfocarte.",
+  "gaby-guia1":"Los conceptos base del examen y los servicios que más se confunden, con tablas, tarjetas y ejercicios.",
+  "gaby-practica":"Pones a prueba lo de la Guía 1: une parejas, completa frases y ordena pasos, con retroalimentación al momento.",
+  "gaby-guia2":"Los temas avanzados: seguridad, kit de SageMaker, asistentes de AWS y cómo adaptar y evaluar modelos.",
+  "gaby-simulacro1":"65 preguntas en 90 minutos, igual que el examen real. Busca un rato sin interrupciones."
+};
+function nextStep(){
+  for(let i=0;i<ORDEN.length;i++){ const m=MODS.find(x=>x.k===ORDEN[i]), st=get(ORDEN[i]);
+    if(!st||!st.done) return {m, i, started:!!(st&&st.started), st}; }
+  return null;
+}
+function renderNext(){
+  const n=nextStep(), el=$("next");
+  document.querySelectorAll(".mod").forEach(x=>x.classList.remove("is-next"));
+  if(!n){ el.innerHTML='<div class="k">Tu siguiente paso</div><h2>Terminaste todo el curso</h2><p>Revisa tu calificación del simulacro. Si sacaste 80% o más, ya puedes agendar el examen. Si no, repasa los temas que fallaste y vuelve a intentarlo.</p><div class="row"><a class="btn" href="simulacro-revision.html">Ver mi calificación</a></div>'; return; }
+  const b=badge(n.m), extra=n.started?(n.m.kind==="sim"?Object.keys(n.st.a||{}).length+" de "+n.m.total+" contestadas.":"Ya empezaste; sigue donde te quedaste."):"";
+  el.innerHTML='<div class="k">Tu siguiente paso · '+n.m.n+' de 4</div><h2>'+n.m.t+'</h2><p>'+PORQUE[n.m.k]+'</p>'+
+    '<div class="meta">'+(b&&b.c!=="na"?'Según tu diagnóstico: <b>'+b.t+'</b>. ':'')+extra+'</div>'+
+    '<div class="row"><a class="btn" href="'+n.m.href+'">'+(n.started?"Continuar":"Empezar")+'</a></div>';
+  const card=document.querySelector('.mod[data-k="'+n.m.k+'"]');
+  if(card){ card.classList.add("is-next"); if(!card.querySelector(".nx")) card.querySelector("h3").insertAdjacentHTML("beforebegin",'<span class="nx">Siguiente</span>'); }
+}
 function renderMods(){
   $("mods").innerHTML=MODS.map(m=>{ const s=status(m), b=badge(m);
-    return '<article class="mod"><div class="n">'+m.n+'</div><h3>'+m.t+'</h3>'+(b?'<div class="badge '+b.c+'">'+b.t+'</div>':'')+'<p>'+m.d+'</p><div class="st '+s.cls+'">'+s.txt+'</div><a class="btn" href="'+(s.href||m.href)+'">'+s.btn+'</a></article>'; }).join("");
+    return '<article class="mod" data-k="'+(m.k||'')+'"><div class="n">'+m.n+'</div><h3>'+m.t+'</h3>'+(b?'<div class="badge '+b.c+'">'+b.t+'</div>':'')+'<p>'+m.d+'</p><div class="st '+s.cls+'">'+s.txt+'</div><a class="btn" href="'+(s.href||m.href)+'">'+s.btn+'</a></article>'; }).join("");
   renderRuta();
+  renderNext();
 }
 function showApp(){ $("login").classList.add("hidden"); $("app").classList.remove("hidden"); if(window.AIF_SNAPSHOT) AIF_SNAPSHOT(); renderMods(); }
 function showLogin(){ $("app").classList.add("hidden"); $("login").classList.remove("hidden"); $("pw").focus(); }
