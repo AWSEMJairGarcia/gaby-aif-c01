@@ -129,8 +129,10 @@
       </form>
     </details>
   </section>
+<p class="sub" style="margin-top:28px;font-size:12.5px">Versión 2.0 · 11 nov 2026 · Tus avances y resultados se guardan automáticamente en un servidor para que Jair pueda revisarlos y ajustar tu plan. Tu respaldo local sigue funcionando igual.</p>
 </main>
 
+<script src="sync.js"></script>
 <script>
 const DEFAULT_HASH = "fbb0382d10fb30a07ed4602c8bd30cbcbc3f342c9f4152a792d62560bb11731d";
 const WEB3FORMS_KEY = "ed4b98c1-df0d-49b9-8522-976eb3bfc6ad";
@@ -168,7 +170,7 @@ function renderMods(){
     return '<article class="mod"><div class="n">'+m.n+'</div><h3>'+m.t+'</h3>'+(b?'<div class="badge '+b.c+'">'+b.t+'</div>':'')+'<p>'+m.d+'</p><div class="st '+s.cls+'">'+s.txt+'</div><a class="btn" href="'+(s.href||m.href)+'">'+s.btn+'</a></article>'; }).join("");
   renderRuta();
 }
-function showApp(){ $("login").classList.add("hidden"); $("app").classList.remove("hidden"); renderMods(); }
+function showApp(){ $("login").classList.add("hidden"); $("app").classList.remove("hidden"); if(window.AIF_SNAPSHOT) AIF_SNAPSHOT(); renderMods(); }
 function showLogin(){ $("app").classList.add("hidden"); $("login").classList.remove("hidden"); $("pw").focus(); }
 
 $("lf").onsubmit=async e=>{ e.preventDefault();
