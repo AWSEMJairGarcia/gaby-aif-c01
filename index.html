@@ -145,7 +145,8 @@
     </details>
   </section>
 <p class="sub" style="margin-top:28px;font-size:12.5px">Tus avances y resultados se guardan automáticamente en un servidor para que Jair pueda revisarlos y ajustar tu plan. Tu respaldo local sigue funcionando igual.</p>
-<div class="vh-wrap"><span class="vh-txt" title="Versión del curso">v2.6.0 — build 2026-11-14</span></div>
+<p class="sub" id="estado-sync" style="font-size:12.5px;margin-top:6px"></p>
+<div class="vh-wrap"><span class="vh-txt" title="Versión del curso">v2.6.1 — build 2026-11-14</span></div>
 </main>
 
 <script src="sync.js?v=2.5.2"></script>
@@ -213,7 +214,9 @@ function renderMods(){
   renderRuta();
   renderNext();
 }
-function showApp(){ $("login").classList.add("hidden"); $("app").classList.remove("hidden"); if(window.AIF_SNAPSHOT) AIF_SNAPSHOT(); renderMods(); }
+function estadoSync(){ const el=$("estado-sync"); if(!el||!window.AIF_ESTADO) return; el.textContent="Guardado en el servidor: comprobando..."; el.style.color="";
+  AIF_ESTADO(ok=>{ el.innerHTML= ok ? '<span style="color:var(--ok);font-weight:700">Guardado en el servidor: conectado.</span>' : '<span style="color:var(--bad);font-weight:700">Guardado en el servidor: SIN conexión.</span> Algo en tu red o navegador lo bloquea; tus resultados solo quedan en este navegador. Usa "Descargar mi respaldo" o pégaselos a Kiro.'; }); }
+function showApp(){ $("login").classList.add("hidden"); $("app").classList.remove("hidden"); if(window.AIF_SNAPSHOT) AIF_SNAPSHOT(); renderMods(); estadoSync(); }
 function showLogin(){ $("app").classList.add("hidden"); $("login").classList.remove("hidden"); $("pw").focus(); }
 
 $("lf").onsubmit=async e=>{ e.preventDefault();
