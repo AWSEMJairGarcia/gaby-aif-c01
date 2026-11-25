@@ -147,10 +147,10 @@
 <p class="sub" style="margin-top:28px;font-size:12.5px">Tus avances y resultados se guardan automáticamente en un servidor para que Jair pueda revisarlos y ajustar tu plan. Tu respaldo local sigue funcionando igual.</p>
 <p class="sub" id="estado-sync" style="font-size:12.5px;margin-top:6px"></p>
 <p class="sub" style="font-size:12.5px;margin-top:4px"><button type="button" class="btn sec" id="btn-enviar" style="padding:6px 12px;font-size:13px">Enviar mi avance ahora</button> <span id="envio-info"></span></p>
-<div class="vh-wrap"><span class="vh-txt" title="Versión del curso">v2.10.1 — build 2026-11-19</span></div>
+<div class="vh-wrap"><span class="vh-txt" title="Versión del curso">v2.10.2 — build 2026-11-25</span></div>
 </main>
 
-<script src="sync.js?v=2.7.2"></script>
+<script src="sync.js?v=2.10.2"></script>
 <script>
 const DEFAULT_HASH = "fbb0382d10fb30a07ed4602c8bd30cbcbc3f342c9f4152a792d62560bb11731d";
 const WEB3FORMS_KEY = "ed4b98c1-df0d-49b9-8522-976eb3bfc6ad";
@@ -220,7 +220,7 @@ function envioInfo(){ const el=$("envio-info"); if(!el||!window.AIF_ULTIMOS) ret
 function enviarAhora(){ if(window.AIF_SNAPSHOT) AIF_SNAPSHOT(true); setTimeout(envioInfo,1200); }
 function estadoSync(){ const el=$("estado-sync"); if(!el||!window.AIF_ESTADO) return; el.textContent="Guardado en el servidor: comprobando..."; el.style.color="";
   AIF_ESTADO(ok=>{ el.innerHTML= ok ? '<span style="color:var(--ok);font-weight:700">Guardado en el servidor: conectado.</span>' : '<span style="color:var(--bad);font-weight:700">Guardado en el servidor: SIN conexión.</span> Algo en tu red o navegador lo bloquea; tus resultados solo quedan en este navegador. Usa "Descargar mi respaldo" o pégaselos a Kiro.'; }); }
-function showApp(){ $("login").classList.add("hidden"); $("app").classList.remove("hidden"); if(window.AIF_SNAPSHOT) AIF_SNAPSHOT(); renderMods(); estadoSync(); envioInfo(); $("btn-enviar").onclick=enviarAhora; }
+function showApp(){ if(window.AIF_ALERTA_USO) AIF_ALERTA_USO(); $("login").classList.add("hidden"); $("app").classList.remove("hidden"); if(window.AIF_SNAPSHOT) AIF_SNAPSHOT(); renderMods(); estadoSync(); envioInfo(); $("btn-enviar").onclick=enviarAhora; }
 function showLogin(){ $("app").classList.add("hidden"); $("login").classList.remove("hidden"); $("pw").focus(); }
 
 $("lf").onsubmit=async e=>{ e.preventDefault();

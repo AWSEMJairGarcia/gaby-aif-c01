@@ -47,6 +47,39 @@
       tiempo_seg: st && st.base ? Math.round(st.base / 1000) : null });
   }
 
+
+  // ---- Alertas para Jair (Web3Forms): primer uso y diagnóstico terminado ----
+  var NOMBRE = "Gaby";
+  var W3F = "ed4b98c1-df0d-49b9-8522-976eb3bfc6ad";
+  var KEY_DIAG = {"1": "B", "2": "C", "3": "C", "4": "D", "5": "C", "6": "D", "7": "B", "8": "C", "9": "A", "10": "D", "11": "BD", "12": "B", "13": "C", "14": "C", "15": "A", "16": "B", "17": "D", "18": "C", "19": "A", "20": "C"};
+  var DOM_DIAG = {"1": "D3", "2": "D1", "3": "D2", "4": "D2", "5": "D3", "6": "D3", "7": "D4", "8": "D5", "9": "D1", "10": "D3", "11": "D2", "12": "D4", "13": "D5", "14": "D3", "15": "D1", "16": "D2", "17": "D3", "18": "D5", "19": "D4", "20": "D3"};
+  function alerta(asunto, mensaje, flag) {
+    try {
+      if (flag) { if (localStorage.getItem(flag)) return; origSet.call(localStorage, flag, String(Date.now())); }
+      if (localStorage.getItem(PREFIX + "alertas-off")) return;
+      fetch("https://api.web3forms.com/submit", { method: "POST", keepalive: true,
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ access_key: W3F, subject: asunto, from_name: "Curso AIF-C01 de " + NOMBRE, message: mensaje }) })
+        .catch(function () { if (flag) try { localStorage.removeItem(flag); } catch (e) {} });
+    } catch (e) {}
+  }
+  function cuando() { return new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" }); }
+  window.AIF_ALERTA_USO = function () {
+    alerta("Ya entró " + NOMBRE + " al curso AIF-C01", NOMBRE + " abrió su plataforma por primera vez en este navegador.\nUsuario: " + USUARIO + "\nCuándo: " + cuando() + "\nNavegador: " + navigator.userAgent, PREFIX + "alerta-uso");
+  };
+  function alertaDiagnostico(st) {
+    var a = st.a || {}, ok = 0, d = {}, fallas = [];
+    Object.keys(KEY_DIAG).forEach(function (n) {
+      var dm = DOM_DIAG[n]; d[dm] = d[dm] || [0, 0]; d[dm][1]++;
+      if ((a[n] || "") === KEY_DIAG[n]) { ok++; d[dm][0]++; } else fallas.push(n + ":" + (a[n] || "-") + " (correcta " + KEY_DIAG[n] + ")");
+    });
+    var lineas = Object.keys(d).sort().map(function (k) { return k + ": " + d[k][0] + " de " + d[k][1]; }).join("\n");
+    alerta(NOMBRE + " terminó el diagnóstico: " + ok + " de 20",
+      NOMBRE + " terminó el diagnóstico de AIF-C01.\nCalificación: " + ok + " de 20 (" + Math.round(ok * 5) + "%)\nTiempo: " + Math.round((st.base || 0) / 60000) + " min\nCuándo: " + cuando() +
+      "\n\nPor dominio:\n" + lineas + "\n\nFalladas (pregunta:su respuesta):\n" + fallas.join("\n") +
+      "\n\nSiguiente: avísale a Kiro \"" + NOMBRE.toLowerCase() + " terminó el diagnóstico\" para armar su plan.", PREFIX + "alerta-diag");
+  }
+
   // Vigila lo que guardan las páginas en localStorage.
   var origSet = Storage.prototype.setItem;
   var ultimoAvance = {};
@@ -58,7 +91,7 @@
     if (!modulo || !esMod(modulo)) return;
     var st = null; try { st = JSON.parse(v); } catch (e) { return; }
     if (!st || !st.started) return;
-    if (st.done && !(antes && antes.done)) { enviarModulo(modulo, st, "terminado"); ultimoAvance[modulo] = Date.now(); return; }
+    if (st.done && !(antes && antes.done)) { enviarModulo(modulo, st, "terminado"); ultimoAvance[modulo] = Date.now(); if (modulo === "diagnostico") alertaDiagnostico(st); return; }
     if (!st.done && Date.now() - (ultimoAvance[modulo] || 0) > AVANCE_CADA_MS) { ultimoAvance[modulo] = Date.now(); enviarModulo(modulo, st, "avance"); }
   };
 
